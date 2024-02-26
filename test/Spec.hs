@@ -1,7 +1,9 @@
 import Day13Spec (runDay13)
+import ListUtilSpec (runListUtil)
 main :: IO ()
 main = do
                 printTestRes
+                runListUtil
                 runDay13
 
 

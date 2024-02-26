@@ -1,6 +1,6 @@
 cabal-version: 2.2
 
--- This file has been generated from package.yaml by hpack version 0.35.1.
+-- This file has been generated from package.yaml by hpack version 0.36.0.
 --
 -- see: https://github.com/sol/hpack
 
@@ -27,6 +27,7 @@ library
   exposed-modules:
       Advent.Day13.Mirror
       Advent.Util.FileUtil
+      Advent.Util.Funct
       Advent.Util.ListUtil
       Lib
   other-modules:
@@ -61,6 +62,7 @@ test-suite advent-hs-test
   main-is: Spec.hs
   other-modules:
       Day13Spec
+      ListUtilSpec
       Paths_advent_hs
   autogen-modules:
       Paths_advent_hs
