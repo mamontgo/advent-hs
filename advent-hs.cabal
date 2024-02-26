@@ -28,6 +28,7 @@ library
       Advent.Day13.Mirror
       Advent.Util.FileUtil
       Advent.Util.Funct
+      Advent.Util.ListPoint
       Advent.Util.ListUtil
       Lib
   other-modules:

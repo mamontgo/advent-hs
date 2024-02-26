@@ -1,10 +1,20 @@
-module Advent.Util.ListUtil (splitMid, columns, maybeHead, maybeTail, singleton, combos, intoList) where
+module Advent.Util.ListUtil (splitMid, columns, maybeHead, maybeTail, singleton, combos, intoList, variations, takeWhileInclusive) where
 
 splitMid:: [a] -> ([a], [a])
 splitMid [] = ([], [])
 splitMid [a] = ([], [a])
 splitMid m = splitAt middle m
             where middle = div (length m) 2
+
+takeWhileInclusive :: (a -> Bool) -> [a] -> [a]
+takeWhileInclusive _ [] = []
+takeWhileInclusive p (x:xs) = x : if p x then takeWhileInclusive p xs
+                                         else []
+
+intoList:: [a] -> [a] -> a -> [a]
+intoList h t i = h ++[i]++t
+
+
 
 columns:: (Eq a) => a -> [[a]] -> [[a]]
 columns _ [] = []
@@ -14,9 +24,6 @@ columns d m
     where
         h = maybeHead d <$> m
         t = maybeTail <$> m
-
-intoList:: [a] -> [a] -> a -> [a]
-intoList h t i = h ++[i]++t
 
 maybeTail::  [a] -> [a]
 maybeTail [] = []
@@ -35,6 +42,13 @@ combos (h:t) = foldl comboItems h t
 
 comboItems:: Monoid a => [a] -> [a] -> [a]
 comboItems a = (mappend <$> a <*>)
+
+variations:: (a -> a) -> [a] -> [[a]]
+variations f = variationsBuild f []
+
+variationsBuild:: (a -> a) -> [a] -> [a] -> [[a]]
+variationsBuild _ _ [] = []
+variationsBuild f init_ (h:t) = (init_ ++ [f h] ++ t):variationsBuild f (init_ ++ [h]) t
 
 
 -- extCombos:: [[[a]]] -> [[[a]]]

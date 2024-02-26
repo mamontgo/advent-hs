@@ -1,10 +1,14 @@
 module Day13Spec (runDay13) where
-import Advent.Day13.Mirror (score, getPoints, scoreAll, Points, checkAllReflection, scoreAllCombo, checkAdjustedReflections)
+import Advent.Day13.Mirror (score, getPoints, scoreAll, Points, findFirstValidReflection, scoreAllCombo, checkAdjustedReflections)
 import Test.Framework
 
 runDay13:: IO ()
 runDay13 = do
+        day13Part2PrintAllTest
         day13Part2PrintHeadResult
+        day13Part2PrintEx1
+        day13Part2_2PrintHeadResult
+        day13Part2PrintAllResult
         ex1
         ex7
         ex9
@@ -65,12 +69,12 @@ getTotalScore:: String -> IO Int
 getTotalScore f = scoreAll <$> getPoints f
 
 getScore:: String -> IO Int
-getScore f = score checkAllReflection <$> headPoints f
+getScore f = score findFirstValidReflection <$> headPoints f
 
 headPointsPrint:: String -> String -> IO ()
 headPointsPrint f m =
                         do
-                                res <- score checkAllReflection <$> points
+                                res <- score findFirstValidReflection <$> points
                                 print m
                                 print res
                         where
@@ -84,8 +88,36 @@ headPoints f = head <$> getPoints f
 day13Part2PrintHeadResult:: IO ()
 day13Part2PrintHeadResult = do
         headAdjustedPointsPrint "./data/day13/test.txt" "PART 2: Head score "
-        assertIO (getAdjustedScore "./data/day13/test.txt") 300
+        -- assertIO (getAdjustedScore "./data/day13/test.txt") 300
 
+
+day13Part2_2PrintHeadResult:: IO ()
+day13Part2_2PrintHeadResult = do
+        headAdjustedPointsPrint "./data/day13/test2.txt" "PART 2_2: Head score "
+        assertIO (getAdjustedScore "./data/day13/test2.txt") 100
+
+day13Part2PrintEx1:: IO ()
+day13Part2PrintEx1 = do
+        headAdjustedPointsPrint "./data/day13/ex1.txt" "PART 2: EX1 Head score "
+        assertIO (getAdjustedScore "./data/day13/ex1.txt") 12
+
+day13Part2PrintAllTest:: IO ()
+day13Part2PrintAllTest =
+                        do
+                                s <- getTotalAdjustedScore "./data/day13/test.txt"
+                                print "PART2: Total Test score"
+                                print s
+                                assertEqual s 400
+
+day13Part2PrintAllResult:: IO ()
+day13Part2PrintAllResult =
+                        do
+                                s <- getTotalAdjustedScore "./data/day13/res.txt"
+                                print "PART2: Total Result score"
+                                print s
+                                assertEqual s 32728
+                                -- assertEqual s 20962
+                                -- assertEqual s 39297
 
 headAdjustedPointsPrint:: String -> String -> IO ()
 headAdjustedPointsPrint f m =

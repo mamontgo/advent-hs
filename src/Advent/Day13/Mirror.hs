@@ -1,13 +1,13 @@
-module Advent.Day13.Mirror (Points, Point(Rock, Ash), get, printp, printpc, getPoints, matchAll, 
-    score, scoreAll, scoreAllCombo, checkAllReflection, checkAdjustedReflections) where
+module Advent.Day13.Mirror (Points, Point(Rock, Ash), get, printp, printpc, getPoints, matchAll,
+    score, scoreAll, scoreAllCombo, findFirstValidReflection, checkAdjustedReflections) where
 
 import Advent.Util.FileUtil(load)
 import Data.List.Split
-import Advent.Util.ListUtil (columns, intoList)
+import Advent.Util.ListUtil (columns, variations, intoList, takeWhileInclusive)
 import Data.Maybe (fromMaybe)
 
 data Point = Rock|Ash deriving (Show, Eq)
-data ReflectionResult = ReflectionResult {valid :: Bool, start:: Int}
+data ReflectionResult = ReflectionResult {valid :: Bool, start:: Int} deriving (Show, Eq)
 type Points = [Point]
 
 type ReflectionResultFunction = [Points] -> ReflectionResult
@@ -33,25 +33,51 @@ reflectFailed = ReflectionResult False 0
 
 checkAdjustedReflections:: [Points] -> ReflectionResult
 checkAdjustedReflections [] =  reflectFailed
-checkAdjustedReflections p = checkAdjustedReflectionsMap [] p
+checkAdjustedReflections p = checkAdjustedReflectionsMap orig [] p
+                                    where orig = findFirstValidReflection p
 
-checkAdjustedReflectionsMap:: [Points] -> [Points] -> ReflectionResult
-checkAdjustedReflectionsMap _ [] = reflectFailed
-checkAdjustedReflectionsMap init_ (h:t) = if valid res then res else checkAdjustedReflectionsMap (init_ ++ [h]) t
+
+test:: [Points] -> (ReflectionResult, ReflectionResult)
+test [] =  (reflectFailed, reflectFailed)
+test p = (checkAdjustedReflectionsMap orig [] p, orig)
+                                    where orig = findFirstValidReflection p
+
+
+
+checkAdjustedReflectionsMap:: ReflectionResult -> [Points] -> [Points] -> ReflectionResult
+checkAdjustedReflectionsMap _ _ [] = reflectFailed
+checkAdjustedReflectionsMap orig init_ (h:t) = if notValidMatch res then checkAdjustedReflectionsMap orig (init_ ++ [h]) t else res
                                         where
                                             res = foldl (\ _ x -> x) reflectFailed ll
-                                            ll = takeWhile valid results
-                                            results = checkAllReflection <$> toggleCombos
-                                            toggleCombos = (\x -> init_ ++ [x] ++ t) <$> togglePointCombos
+                                            ll = takeWhileInclusive notValidMatch results
+                                            results = concatMap findAllValidReflection toggleCombos
+                                            toggleCombos = intoList init_ t <$> togglePointCombos
                                             togglePointCombos = togglePoints h
+                                            notValidMatch = rfilter orig
 
-checkAllReflection:: [Points] -> ReflectionResult
-checkAllReflection p = checkAllReflectionPoints (matchAll p) p
+rfilter:: ReflectionResult -> ReflectionResult -> Bool
+rfilter (ReflectionResult v s) (ReflectionResult v_ s_) = not v_ || (v && s == s_)
 
-checkAllReflectionPoints:: [Int] -> [Points] -> ReflectionResult
-checkAllReflectionPoints [] _ = reflectFailed
-checkAllReflectionPoints (h:t) a
-    | not (valid m) && t /= [] = checkAllReflectionPoints t a
+findAllValidReflection:: [Points] -> [ReflectionResult]
+findAllValidReflection p = findAllValidReflectionPoints (matchAll p) p
+
+findFirstValidReflection:: [Points] -> ReflectionResult
+findFirstValidReflection p = findFirstValidReflectionPoints (matchAll p) p
+
+
+findAllValidReflectionPoints:: [Int] -> [Points] -> [ReflectionResult]
+findAllValidReflectionPoints [] _ = []
+findAllValidReflectionPoints (h:t) a =  if valid m then
+                                            m : findAllValidReflectionPoints t a
+                                        else
+                                            findAllValidReflectionPoints t a
+                                        where
+                                            m = checkMatchedReflection h a
+
+findFirstValidReflectionPoints:: [Int] -> [Points] -> ReflectionResult
+findFirstValidReflectionPoints [] _ = reflectFailed
+findFirstValidReflectionPoints (h:t) a
+    | not (valid m) && t /= [] = findFirstValidReflectionPoints t a
     | otherwise = m
     where
         m = checkMatchedReflection h a
@@ -70,7 +96,7 @@ scoreAllCombo = sum . (score checkAdjustedReflections <$>)
 
 
 scoreAll:: [[Points]] -> Int
-scoreAll = sum . (score checkAllReflection <$>)
+scoreAll = sum . (score findFirstValidReflection <$>)
 
 score:: ReflectionResultFunction -> [Points] -> Int
 score f p =  fromMaybe (fromMaybe 0 vcalc) hcalc
@@ -111,16 +137,9 @@ reflectMatch p@(a : as, b : bs)
         hasBtail = not (null bs)
         hasAtail = not (null as)
 
-
-
 togglePoints:: Points -> [Points]
 togglePoints [] = []
-togglePoints h = togglePointCollect [] [] h
-
-togglePointCollect :: [Points] -> Points -> Points -> [Points]
-togglePointCollect res _ [] = res
-togglePointCollect res init_ (h:t) =  togglePointCollect (res ++ [init_ ++ [togglePoint h] ++ t]) (init_++[h]) t
-
+togglePoints p = variations togglePoint p
 
 
 togglePoint:: Point -> Point
@@ -130,15 +149,15 @@ togglePoint Rock = Ash
 
 matchAll :: [Points] -> [Int]
 matchAll [] = []
-matchAll (h:t) =  matchAllReflection 0 [] h t
+matchAll (h:t) =  matchAllReflection 0 h t
 
 
-matchAllReflection:: Int -> [Int] -> Points -> [Points] -> [Int]
-matchAllReflection _ r _ [] = r
-matchAllReflection row c p (h:t) =  if p == h then
-                                        matchAllReflection (row+1) (row:c) h t
+matchAllReflection:: Int -> Points -> [Points] -> [Int]
+matchAllReflection _ _ [] = []
+matchAllReflection row p (h:t) =  if p == h then
+                                        row:matchAllReflection (row+1) h t
                                     else
-                                        matchAllReflection (row+1) c h t
+                                        matchAllReflection (row+1) h t
 
 
 
