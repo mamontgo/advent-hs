@@ -1,4 +1,5 @@
-module Advent.Day13.Mirror (Points, Point(Rock, Ash), get, printp, printpc, getPoints, matchAll, score, scoreAll, scoreAllCombo, toggle,checkAllReflection, checkAdjustedReflections) where
+module Advent.Day13.Mirror (Points, Point(Rock, Ash), get, printp, printpc, getPoints, matchAll, 
+    score, scoreAll, scoreAllCombo, checkAllReflection, checkAdjustedReflections) where
 
 import Advent.Util.FileUtil(load)
 import Data.List.Split

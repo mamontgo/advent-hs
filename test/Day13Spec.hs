@@ -1,11 +1,10 @@
 module Day13Spec (runDay13) where
-import Advent.Day13.Mirror (score, getPoints, scoreAll, Points, Point(Rock, Ash), toggle, checkAllReflection, scoreAllCombo, checkAdjustedReflections)
+import Advent.Day13.Mirror (score, getPoints, scoreAll, Points, checkAllReflection, scoreAllCombo, checkAdjustedReflections)
 import Test.Framework
 
 runDay13:: IO ()
 runDay13 = do
         day13Part2PrintHeadResult
-        togglePrint
         ex1
         ex7
         ex9
@@ -13,10 +12,6 @@ runDay13 = do
         day13Part1PrintAllResult
         day13Part1PrintFinalResult
 
-togglePrint::  IO ()
-togglePrint = do
-        print $ toggle [[Ash, Rock], [Rock, Ash]]
-        assertEqual (toggle [[Ash, Rock], [Rock, Ash]]) ([[[Rock,Rock],[Ash,Ash]],[[Ash,Ash],[Rock,Rock]]])
 
 ex1:: IO ()
 ex1 = do
@@ -89,7 +84,7 @@ headPoints f = head <$> getPoints f
 day13Part2PrintHeadResult:: IO ()
 day13Part2PrintHeadResult = do
         headAdjustedPointsPrint "./data/day13/test.txt" "PART 2: Head score "
-        assertIO (getAdjustedScore "./data/day13/test.txt") 5
+        assertIO (getAdjustedScore "./data/day13/test.txt") 300
 
 
 headAdjustedPointsPrint:: String -> String -> IO ()

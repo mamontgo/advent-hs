@@ -1,4 +1,4 @@
-module Advent.Util.ListUtil (splitMid, columns, maybeHead, maybeTail, singleton, combos, inList) where
+module Advent.Util.ListUtil (splitMid, columns, maybeHead, maybeTail, singleton, combos, intoList) where
 
 splitMid:: [a] -> ([a], [a])
 splitMid [] = ([], [])
@@ -15,8 +15,8 @@ columns d m
         h = maybeHead d <$> m
         t = maybeTail <$> m
 
-inList:: [a] -> [a] -> a -> [a]
-inList h t i = h ++[i]++t
+intoList:: [a] -> [a] -> a -> [a]
+intoList h t i = h ++[i]++t
 
 maybeTail::  [a] -> [a]
 maybeTail [] = []
