@@ -26,6 +26,7 @@ source-repository head
 library
   exposed-modules:
       Advent.Day13.Mirror
+      Advent.Day14.Dish
       Advent.Util.FileUtil
       Advent.Util.Funct
       Advent.Util.ListPoint
@@ -63,6 +64,7 @@ test-suite advent-hs-test
   main-is: Spec.hs
   other-modules:
       Day13Spec
+      Day14Spec
       ListUtilSpec
       Paths_advent_hs
   autogen-modules:

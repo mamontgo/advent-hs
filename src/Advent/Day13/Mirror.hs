@@ -34,14 +34,7 @@ reflectFailed = ReflectionResult False 0
 checkAdjustedReflections:: [Points] -> ReflectionResult
 checkAdjustedReflections [] =  reflectFailed
 checkAdjustedReflections p = checkAdjustedReflectionsMap orig [] p
-                                    where orig = findFirstValidReflection p
-
-
-test:: [Points] -> (ReflectionResult, ReflectionResult)
-test [] =  (reflectFailed, reflectFailed)
-test p = (checkAdjustedReflectionsMap orig [] p, orig)
-                                    where orig = findFirstValidReflection p
-
+                                    where orig = findFirstValidReflection p  -- can't be the same reflection so filter out these matches
 
 
 checkAdjustedReflectionsMap:: ReflectionResult -> [Points] -> [Points] -> ReflectionResult

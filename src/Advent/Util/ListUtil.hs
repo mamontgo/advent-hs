@@ -1,4 +1,8 @@
-module Advent.Util.ListUtil (splitMid, columns, maybeHead, maybeTail, singleton, combos, intoList, variations, takeWhileInclusive) where
+module Advent.Util.ListUtil (splitMid, columns, maybeHead, maybeTail, singleton, combos, intoList, variations, takeWhileInclusive, elemIndexes) where
+
+
+elemIndexes :: Eq a => a -> [a] -> [Int]
+elemIndexes a xs = snd $ foldl (\init_ v -> (fst init_+1, if v == a then snd init_++[fst init_] else snd init_ )) (0, []:: [Int]) xs
 
 splitMid:: [a] -> ([a], [a])
 splitMid [] = ([], [])
