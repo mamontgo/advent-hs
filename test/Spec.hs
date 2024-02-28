@@ -1,5 +1,6 @@
 import Day13Spec (runDay13)
 import Day14Spec (runDay14)
+import Day15Spec (runDay15)
 import ListUtilSpec (runListUtil)
 
 main :: IO ()
@@ -9,6 +10,7 @@ main = do
                 runListUtil
                 runDay13
                 runDay14 
+                runDay15 
 
 
 
