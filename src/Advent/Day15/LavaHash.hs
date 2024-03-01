@@ -11,7 +11,7 @@ data Op = AddOp String Int | DelOp String deriving (Show, Eq)
 
 data Lense = Lense {label :: String, count :: Int} deriving (Show, Eq)
 
-data Box = Box [Lense] deriving (Show, Eq)
+newtype Box = Box [Lense] deriving (Show, Eq)
 
 buildBoxes :: [Op] -> V.Vector Box
 buildBoxes = foldl updateBox boxes
@@ -68,9 +68,9 @@ asDelOp (h : _) = DelOp h
 asDelOp _ = DelOp ""
 
 performBoxOp :: Box -> Op -> Box
-performBoxOp (Box xs) o@(DelOp l) = Box (filter ((/= l) . label) xs)
-performBoxOp (Box []) o@(AddOp l v) = Box [Lense l v]
-performBoxOp (Box xs) o@(AddOp l v) = Box $ fromMaybe (xs ++ [n]) m
+performBoxOp (Box xs) (DelOp l) = Box (filter ((/= l) . label) xs)
+performBoxOp (Box []) (AddOp l v) = Box [Lense l v]
+performBoxOp (Box xs) (AddOp l v) = Box $ fromMaybe (xs ++ [n]) m
   where
     m = replaceFirst ((== l) . label) n xs
     n = Lense l v

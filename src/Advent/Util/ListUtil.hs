@@ -8,7 +8,7 @@ replaceFirst = replaceFirstRec []
 
 replaceFirstRec :: [a] -> (a -> Bool) -> a -> [a] -> Maybe [a]
 replaceFirstRec init_ f v (h : t) = if f h then Just (init_ ++ (v : t)) else replaceFirstRec (init_ ++ [h]) f v t
-replaceFirstRec init_ _ _ [] = Nothing
+replaceFirstRec _ _ _ [] = Nothing
 
 splitMid :: [a] -> ([a], [a])
 splitMid [] = ([], [])

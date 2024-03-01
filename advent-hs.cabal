@@ -28,6 +28,7 @@ library
       Advent.Day13.Mirror
       Advent.Day14.Dish
       Advent.Day15.LavaHash
+      Advent.Day16.Path
       Advent.Util.FileUtil
       Advent.Util.Funct
       Advent.Util.ListPoint
@@ -42,6 +43,8 @@ library
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
   build-depends:
       base >=4.7 && <5
+    , containers
+    , matrix
     , primitive
     , split
     , vector
@@ -59,6 +62,8 @@ executable advent-hs-exe
   build-depends:
       advent-hs
     , base >=4.7 && <5
+    , containers
+    , matrix
     , primitive
     , split
     , vector
@@ -71,6 +76,7 @@ test-suite advent-hs-test
       Day13Spec
       Day14Spec
       Day15Spec
+      Day16Spec
       ListUtilSpec
       Paths_advent_hs
   autogen-modules:
@@ -82,6 +88,8 @@ test-suite advent-hs-test
       HTF
     , advent-hs
     , base >=4.7 && <5
+    , containers
+    , matrix
     , primitive
     , split
     , vector
