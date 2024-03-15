@@ -1,4 +1,14 @@
-module Advent.Util.Funct ( (<$*>), cycleCall, ioCall, cycleBreakingCall, cycleBreakingCallIO, ioCallWithMessage, cycleCallCollect) where
+module Advent.Util.Funct ( 
+    (<$*>), 
+    cycleCall, 
+    ioCall, 
+    cycleBreakingCall, 
+    cycleBreakingCallIO, 
+    ioCallWithMessage, 
+    cycleCallCollect,
+    combine,
+    (&&&)
+) where
 
 
 (<$*>) :: Functor f => f (a -> b) -> a -> f b
@@ -8,6 +18,12 @@ x <$*> y = fmap (\m -> m y) x
 ioCall:: (a -> a) -> IO a -> IO a
 ioCall f ioa = do f <$> ioa
 
+
+(&&&):: (a -> Bool) -> (a -> Bool) -> a -> Bool
+(&&&) = combine (&&)
+
+combine:: (b -> c -> d) -> (a -> b) -> (a -> c) -> a -> d
+combine f x y a = f (x a) (y a)
 
 ioCallWithMessage:: Show a => String -> (a -> a) -> IO a -> IO a
 ioCallWithMessage s f ioa = do

@@ -29,10 +29,12 @@ library
       Advent.Day14.Dish
       Advent.Day15.LavaHash
       Advent.Day16.Path
+      Advent.Day17.Crucible
       Advent.Util.FileUtil
       Advent.Util.Funct
       Advent.Util.ListPoint
       Advent.Util.ListUtil
+      Advent.Util.MapUtil
       Lib
   other-modules:
       Paths_advent_hs
@@ -77,6 +79,7 @@ test-suite advent-hs-test
       Day14Spec
       Day15Spec
       Day16Spec
+      Day17Spec
       ListUtilSpec
       Paths_advent_hs
   autogen-modules:
